@@ -260,6 +260,27 @@ class WorkflowTests(unittest.TestCase):
         with self.assertRaises(ValidationError):
             self.store.resume()
 
+    def test_status_surfaces_current_human_request_and_exact_approval_target(self):
+        self.engine.start(0)
+        self.engine.question(self.rev(), dict(id="Q-visible", text="Which queue is in scope?", blocking=True, answer=None))
+        status = self.store.folder / "project-status.md"
+        text = status.read_text(encoding="utf-8")
+        self.assertIn("Waiting on you? Yes", text)
+        self.assertIn("Q-visible: Which queue is in scope?", text)
+        self.engine.answer(self.rev(), "Q-visible", "Email queue", "human")
+        self.assertIn("No current request", status.read_text(encoding="utf-8"))
+        self.worker("Brief for email queue")
+        self.review()
+        state = self.store.load()
+        status.unlink()
+        self.store.resume()
+        text = status.read_text(encoding="utf-8")
+        self.assertIn("Waiting on you? Yes", text)
+        self.assertIn(state["artifact"]["hash"], text)
+        self.assertIn(f"Expected state revision: {state['revision']}", text)
+        self.engine.approve(state["revision"], state["artifact"]["hash"], "human")
+        self.assertIn("No current request", status.read_text(encoding="utf-8"))
+
 
 if __name__ == "__main__":
     unittest.main()
