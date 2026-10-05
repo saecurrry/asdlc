@@ -1,0 +1,27 @@
+{
+  "run_id": "d628dac5-4efa-45ab-9fe6-a9f43ee513ad",
+  "revision": 4,
+  "input_hash": "56036cd1022c3d945ffc14215225941c37d9bdedf35ea878b63c31f5f10e30d2",
+  "kind": "review",
+  "actor": "fresh-codex-reviewer",
+  "artifact_hash": "b0423fa808dce9c27a35abaec1e4626d4f2596a81d0502b74e74c318660f7b58",
+  "content": null,
+  "questions": [],
+  "findings": [
+    {
+      "id": "DISC-SOURCE-001",
+      "severity": "medium",
+      "blocking": true,
+      "location": "Synthetic discovery brief: Outcome O1 and Actors",
+      "evidence": "The artifact asserts 'support manager measures weekly' and includes the support manager as an actor. The supplied source facts establish support agents and an instrumented queue, but do not confirm a support manager, measurement ownership or weekly cadence.",
+      "criterion": "Business outcome, actors, success measures and proposed assumptions must be clearly distinguished; no invented agreed facts.",
+      "impact": "Downstream requirements could treat an unconfirmed measurement responsibility and cadence as agreed business requirements.",
+      "resolution": "Label the support manager role, measurement ownership and weekly cadence as proposed, unconfirmed assumptions, or remove them. Obtain explicit source confirmation before treating them as agreed facts.",
+      "owner": "discovery",
+      "disposition": "open"
+    }
+  ],
+  "raid": [],
+  "verdict": "changes_required",
+  "summary": "Outcome, target, timeframe, scope, exclusions and design unknowns are clear. The absent wiki and synthetic fixture status are disclosed. One blocking source-fidelity finding remains; this review grants no human acceptance."
+}

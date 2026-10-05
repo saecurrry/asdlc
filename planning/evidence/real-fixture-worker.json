@@ -1,0 +1,50 @@
+{
+  "run_id": "472bf21a-402c-4a53-b777-5d032db74443",
+  "revision": 6,
+  "input_hash": "56036cd1022c3d945ffc14215225941c37d9bdedf35ea878b63c31f5f10e30d2",
+  "kind": "worker",
+  "actor": "fixture-author",
+  "artifact_hash": null,
+  "content": "# Synthetic discovery brief \u2014 local fixture, draft\n\n## Source facts\n\n<a id=\"source-f1\"></a>**F1:** The supplied fixture brief states that support agents triage email tickets.\n\n<a id=\"source-f2\"></a>**F2:** The supplied fixture brief sets an outcome of reducing median email queue wait from 8 hours to 4 hours within three months. An instrumented baseline queue already exists.\n\n<a id=\"source-f3\"></a>**F3:** Scope is queue triage; staffing and other channels are excluded.\n\nThese are synthetic owner facts supplied in this dispatch, not real business facts or human approvals. No external source documents were supplied.\n\n## Business outcome and success measure\n\n**DISC-REQ-001 / O1:** Reduce median email ticket queue wait from the stated 8-hour baseline to 4 hours within three months. Source: [F2](#source-f2).\n\nThe existing instrumented queue is confirmed. Measurement ownership, reporting cadence, the precise queue-wait definition and the start of the three-month period remain unconfirmed. No measurement responsibility or cadence is asserted as agreed.\n\n## Actors and boundaries\n\n**DISC-REQ-002:** Confirmed operational actors are support agents who triage email tickets. Source: [F1](#source-f1). No support manager role is established by the supplied facts.\n\n**DISC-REQ-003:** Include email queue triage. Exclude staffing changes and other channels. Source: [F3](#source-f3).\n\n## Unknowns and proposals\n\nThe triage approach remains undecided; no approach is agreed. Measurement ownership and cadence require confirmation (DISC-Q-001). The metric definition and measurement window require confirmation (DISC-Q-002).\n\n**Proposed risk DISC-RISK-001:** If prioritisation is selected, lower-priority tickets could experience longer waits. A fairness measure should be considered during requirements development; it is not an agreed requirement.\n\nNo support manager role, weekly reporting cadence or measurement owner is proposed as a default.\n\n## Standards, patterns and review status\n\nCentral wiki standards and patterns are not configured; no Markdown sources were supplied or found in the provided wiki context. This brief is a clearly labelled local fixture.\n\nThis correction removes the unsupported support manager actor and weekly measurement responsibility identified in DISC-SOURCE-001. It does not mark that finding resolved or grant approval. Fresh independent review and explicit human approval of the exact version remain required; historical review evidence is not approval.",
+  "questions": [
+    {
+      "id": "DISC-Q-001",
+      "text": "Who should own measurement of O1, and what reporting cadence should apply?",
+      "blocking": true,
+      "answer": null
+    },
+    {
+      "id": "DISC-Q-002",
+      "text": "What events define email queue wait, and when does the three-month target period start?",
+      "blocking": true,
+      "answer": null
+    }
+  ],
+  "findings": [],
+  "raid": [
+    {
+      "id": "DISC-RISK-001",
+      "kind": "risk",
+      "owner": "unassigned",
+      "source": "Proposed discovery risk; no prioritisation approach is confirmed.",
+      "impact": "If prioritisation is adopted, lower-priority tickets could wait longer despite improvement in the median.",
+      "response": "Consider fairness measures during requirements development and confirm ownership.",
+      "status": "open",
+      "created": "2026-10-05",
+      "updated": "2026-10-05"
+    },
+    {
+      "id": "DISC-ISSUE-001",
+      "kind": "issue",
+      "owner": "unassigned",
+      "source": "Supplied fixture facts omit measurement ownership, cadence, metric definition and target-period start.",
+      "impact": "Success cannot yet be evaluated against a fully specified measurement agreement.",
+      "response": "Obtain explicit answers to DISC-Q-001 and DISC-Q-002 before treating measurement details as agreed requirements.",
+      "status": "open",
+      "created": "2026-10-05",
+      "updated": "2026-10-05"
+    }
+  ],
+  "verdict": "complete",
+  "summary": "Completed the discovery correction by removing unsupported actor and reporting claims. Measurement decisions remain unanswered; the draft requires fresh independent review and exact-version human approval."
+}

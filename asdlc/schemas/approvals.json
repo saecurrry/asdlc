@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "actor": {
+        "type": "string",
+        "minLength": 1
+      },
+      "artifact_hash": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      },
+      "input_hash": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      },
+      "date": {
+        "type": "string",
+        "minLength": 1
+      },
+      "valid": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "id",
+      "actor",
+      "artifact_hash",
+      "input_hash",
+      "date",
+      "valid"
+    ],
+    "additionalProperties": false
+  }
+}

@@ -1,0 +1,13 @@
+# ASDLC repository instructions
+
+The current user brief supersedes proposed defaults and approval-before-build instructions in the preserved starter pack. Local foundational implementation and tests are authorised. No push, merge, deploy, destructive reset or global configuration changes.
+
+Maintain [build plan](planning/build-plan.md), requirements, architecture and backlog. Documents remain draft until independent review and explicit human approval of exact versions. Building a fixture is not approval to deliver a live project.
+
+Python 3.10+ CLI, serial workers first. The orchestrator alone changes authoritative state. Validate schemas, revisions, hashes, transitions and identities in code. Workers and challengers return structured results, never self-approve. Two repair rounds then escalation; exhaustion never passes. Record unconfirmed assumptions, ask short question rounds, and preserve answers without inventing consent.
+
+Use a separate local wiki clone with multiple projects, standards and patterns; until configured, label the local fixture clearly. No invented GitHub URLs. Use Markdown, relative links and Mermaid. Generated views are owned by ASDLC; human source documents are separate. Persist questions, decisions, findings, approvals, RAID and traceability independently of chats.
+
+The user configured `saecurrry/asdlc-wiki` for agent use. This workspace's clone is `.asdlc-local/asdlc-wiki`; read its AGENTS.md and the target project index/status when resuming. Use its current templates/, standards/, patterns/ and narrowly relevant knowledge. Projects/asdlc/baseline is preserved historical evidence, not the current template source. Use explicit `--wiki .asdlc-local/asdlc-wiki --project <id>` for authorised real-wiki operations. Do not infer push permission or human acceptance from wiki access. Current canonical layout is projects/<id>/state.json, created by the tool; archive editable draft views before init replaces them. Old split JSON drafts are inert archives.
+
+Run `.venv/Scripts/python.exe -m unittest discover -s tests -v` on Windows (equivalent Python invocation elsewhere). Independent challengers inspect requirements, architecture and first increment, report meaningful findings or pass with none. Review is distinct from human acceptance. Keep exact review manifests and reports. Use current installed Codex help plus official documentation, saved authentication, no replacement API runtime or mandatory API key.

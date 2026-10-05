@@ -1,0 +1,3 @@
+# Version-bound evidence uses SHA-256 of exact file bytes.
+# Preserve existing LF/CRLF bytes across commits and checkouts.
+* -text

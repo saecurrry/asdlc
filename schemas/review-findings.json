@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "severity": {
+        "enum": [
+          "low",
+          "medium",
+          "high",
+          "critical"
+        ]
+      },
+      "blocking": {
+        "type": "boolean"
+      },
+      "location": {
+        "type": "string",
+        "minLength": 1
+      },
+      "evidence": {
+        "type": "string",
+        "minLength": 1
+      },
+      "criterion": {
+        "type": "string",
+        "minLength": 1
+      },
+      "impact": {
+        "type": "string",
+        "minLength": 1
+      },
+      "resolution": {
+        "type": "string",
+        "minLength": 1
+      },
+      "owner": {
+        "type": "string",
+        "minLength": 1
+      },
+      "disposition": {
+        "enum": [
+          "open",
+          "resolved"
+        ]
+      }
+    },
+    "required": [
+      "id",
+      "severity",
+      "blocking",
+      "location",
+      "evidence",
+      "criterion",
+      "impact",
+      "resolution",
+      "owner",
+      "disposition"
+    ],
+    "additionalProperties": false
+  }
+}

@@ -1,0 +1,176 @@
+We are building a reusable agentic SDLC tool, called ASDLC, using
+Codex locally. Treat the requirements below as established.
+Do not restart discovery or ask me to explain the project again.
+
+Inspect the repository and any existing instructions. Preserve
+existing work. Ask only when an unresolved decision genuinely blocks
+progress. For reversible implementation choices, choose a sensible
+default, document it, and continue.
+
+CONFIRMED REQUIREMENTS
+
+1. The tool runs locally against a project Git repository.
+
+2. A separate, central, ordinary GitHub repository holds project
+   documentation and persistent workflow state. I will view its
+   local clone using Obsidian. Use Markdown, relative links and
+   Mermaid. Support multiple project folders.
+
+3. The workflow has these stages:
+   - Ideation and discovery.
+   - Business requirements.
+   - Technical high-level design.
+   - Stories and sprint breakdown.
+   - Development sprint by sprint.
+   - Sprint testing.
+   - Sprint review and approval.
+
+4. Every stage has an independent challenger. It reviews output
+   against approved inputs, standards and explicit quality criteria.
+   Meaningful gaps return to the owning stage agent for correction.
+   Missing business decisions return to the user.
+   A reviewer may pass an artifact without inventing findings.
+
+5. Ideation for future projects uses short question rounds to
+   understand the business problem. Never silently turn an unknown
+   or proposed assumption into an agreed requirement.
+   This ASDLC project already has the requirements supplied here.
+
+6. Business requirements produce a BRD, measurable requirements,
+   business rules, scope and exclusions, organised into initiatives
+   and epics.
+
+7. Technical HLD works through C4 context and container diagrams,
+   with selective component views where useful. Identify important
+   sequence diagrams, cloud/service choices, partner integrations,
+   data ownership and operational requirements.
+   Consult central standards/ and patterns/ folders.
+   Record material decisions and alternatives.
+
+8. Stories are small, verifiable delivery units with acceptance
+   criteria, dependencies and explicit serial/parallel eligibility.
+   Use Gherkin for appropriate business behaviour.
+   Group stories into sprints with clear goals.
+
+9. Development reads approved stories and supporting documentation,
+   standards and patterns. Tests are built alongside implementation.
+   Sprint testing validates the integrated increment, not merely
+   individual changes.
+
+10. Each sprint produces a report covering delivered work, evidence,
+    hard parts, blockers, defects, lessons and whether to proceed
+    to the next sprint. Human acceptance is distinct from agent review.
+
+11. Continuously maintain project status, RAID, decisions, questions,
+    findings, approvals and traceability:
+    outcome → requirement → epic → story → test → code change.
+
+12. Persist workflow state independently of conversation memory.
+    Support restart and resume. Bind approvals and test evidence to
+    exact artifact/code versions. Changed inputs invalidate affected
+    downstream outputs and approvals.
+
+IMPLEMENTATION DIRECTION
+
+Start with a local CLI and serial workers. Design for parallel workers
+later. Use the installed Codex harness; check its actual supported
+interfaces and current official documentation before integrating it.
+
+Do not introduce a separate API runtime or require an API key merely
+to replace local Codex. If the chosen integration needs additional
+authentication or billing, explain that before adopting it.
+
+Choose the implementation language after inspecting the repository.
+If it is empty, use Python unless there is a concrete reason otherwise.
+
+Use structured, file-backed project state for the first version,
+with schema validation, atomic writes, locking and revision checks.
+Generate readable project-status.md and raid.md from canonical records.
+
+The orchestrator owns shared state and stage transitions.
+Workers return structured results. Challengers return findings;
+they cannot approve themselves or alter authoritative state.
+
+Prompts guide agents, but deterministic code enforces gates,
+permitted transitions, retry limits and approval requirements.
+
+Use two automatic repair rounds initially, then escalate unresolved
+material findings. Never treat retry exhaustion as a pass.
+
+When wiki paths are not configured, use a clearly labelled local
+fixture to build and test the workflow. Do not invent GitHub URLs.
+
+WHAT TO CREATE NOW
+
+A. Repository instructions:
+   AGENTS.md
+
+B. Persistent planning:
+   planning/build-plan.md
+   planning/requirements.md
+   planning/architecture.md
+   planning/backlog.md
+
+C. Reusable runtime prompts:
+   prompts/orchestrator.md
+   prompts/discovery.md
+   prompts/business-requirements.md
+   prompts/architecture.md
+   prompts/sprint-planning.md
+   prompts/development.md
+   prompts/testing.md
+   prompts/sprint-review.md
+   prompts/challenger.md
+
+D. Schemas for:
+   project state, stage results, review findings, questions,
+   decisions, approvals and RAID records.
+
+Each stage prompt must specify its purpose, required inputs,
+permitted actions, outputs, quality criteria, questions policy
+and exit conditions. Give the challenger a stage-specific rubric.
+
+IMPLEMENTATION PLAN
+
+Create a practical backlog around these increments:
+
+1. Project configuration, state, status/RAID generation and resume.
+2. Discovery → challenger → correction → human approval.
+3. BRD, HLD, stories and sprint planning.
+4. Serial story development, review, tests and sprint acceptance.
+5. Controlled parallel execution and integration.
+
+Detail increments 1 and 2 first. Outline later work without pretending
+the entire implementation is already understood.
+
+Review the requirements, architecture and first increment using
+independent challenger agents if supported. Otherwise produce a
+review bundle for a fresh Codex session and clearly state that
+independent review remains pending. Do not claim self-review is
+independent.
+
+Proceed with the foundational implementation and local tests.
+Keep documents marked draft until their review/approval gates pass.
+Do not dispatch live project delivery through unapproved gates.
+
+FIRST WORKING MILESTONE
+
+Demonstrate a fixture project that:
+- Starts discovery and records questions and answers.
+- Produces a brief.
+- Gets an independent review.
+- Returns blocking findings for correction.
+- Pauses for missing input and human approval.
+- Resumes correctly after restart.
+- Maintains status and RAID.
+- Rejects stale approvals and duplicate result submissions.
+
+A fake agent adapter is acceptable for deterministic tests.
+It does not prove real Codex integration; demonstrate that separately.
+
+Update the living plan as work proceeds. Do not stop after merely
+proposing a plan. Create the documents and prompt files, implement
+the foundation, run meaningful checks, and report what actually works.
+
+Local edits and tests are authorised. Do not push, merge, deploy,
+discard existing work or alter global machine configuration.

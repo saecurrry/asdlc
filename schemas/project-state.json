@@ -1,0 +1,920 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "enum": [
+        1
+      ]
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "project": {
+      "type": "string",
+      "minLength": 1
+    },
+    "config": {
+      "type": "object",
+      "properties": {
+        "target": {
+          "type": "string",
+          "minLength": 1
+        },
+        "wiki": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fixture": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "target",
+        "wiki",
+        "fixture"
+      ],
+      "additionalProperties": false
+    },
+    "stage": {
+      "enum": [
+        "discovery"
+      ]
+    },
+    "status": {
+      "enum": [
+        "not_started",
+        "running",
+        "awaiting_input",
+        "in_review",
+        "changes_requested",
+        "awaiting_approval",
+        "approved",
+        "blocked",
+        "stale"
+      ]
+    },
+    "inputs": {
+      "type": "object",
+      "properties": {
+        "brief": {
+          "type": "string",
+          "minLength": 1
+        },
+        "resources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "content": {
+                "type": "string",
+                "minLength": 1
+              },
+              "hash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "path",
+              "content",
+              "hash"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "brief",
+        "resources"
+      ],
+      "additionalProperties": false
+    },
+    "input_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "blocking": {
+            "type": "boolean"
+          },
+          "answer": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "text",
+          "blocking",
+          "answer"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "artifact": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "string",
+              "minLength": 1
+            },
+            "hash": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "input_hash": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "owner": {
+              "type": "string",
+              "minLength": 1
+            },
+            "run_id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "content",
+            "hash",
+            "input_hash",
+            "owner",
+            "run_id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "minLength": 1
+          },
+          "hash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "input_hash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "content",
+          "hash",
+          "input_hash",
+          "owner",
+          "run_id"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "dispatch": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "revision": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "input_hash": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "actor": {
+              "type": "string",
+              "minLength": 1
+            },
+            "kind": {
+              "enum": [
+                "worker",
+                "review"
+              ]
+            },
+            "artifact_hash": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "revision",
+            "input_hash",
+            "actor",
+            "kind",
+            "artifact_hash"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "run_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "input_hash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "kind": {
+            "enum": [
+              "worker",
+              "review"
+            ]
+          },
+          "actor": {
+            "type": "string",
+            "minLength": 1
+          },
+          "artifact_hash": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "content": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "text": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "blocking": {
+                  "type": "boolean"
+                },
+                "answer": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "text",
+                "blocking",
+                "answer"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "findings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "severity": {
+                  "enum": [
+                    "low",
+                    "medium",
+                    "high",
+                    "critical"
+                  ]
+                },
+                "blocking": {
+                  "type": "boolean"
+                },
+                "location": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "evidence": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "criterion": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "impact": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "resolution": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "owner": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "disposition": {
+                  "enum": [
+                    "open",
+                    "resolved"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "severity",
+                "blocking",
+                "location",
+                "evidence",
+                "criterion",
+                "impact",
+                "resolution",
+                "owner",
+                "disposition"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "raid": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "kind": {
+                  "enum": [
+                    "risk",
+                    "assumption",
+                    "issue",
+                    "dependency"
+                  ]
+                },
+                "owner": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "source": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "impact": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "response": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "status": {
+                  "enum": [
+                    "open",
+                    "closed"
+                  ]
+                },
+                "created": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "updated": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "id",
+                "kind",
+                "owner",
+                "source",
+                "impact",
+                "response",
+                "status",
+                "created",
+                "updated"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "verdict": {
+            "enum": [
+              "complete",
+              "pass",
+              "changes_required",
+              "needs_human_decision",
+              "blocked"
+            ]
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "run_id",
+          "revision",
+          "input_hash",
+          "kind",
+          "actor",
+          "artifact_hash",
+          "content",
+          "questions",
+          "findings",
+          "raid",
+          "verdict",
+          "summary"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "review": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "run_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "actor": {
+              "type": "string",
+              "minLength": 1
+            },
+            "artifact_hash": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "verdict": {
+              "enum": [
+                "pass",
+                "changes_required",
+                "needs_human_decision",
+                "blocked"
+              ]
+            },
+            "findings": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "severity": {
+                    "enum": [
+                      "low",
+                      "medium",
+                      "high",
+                      "critical"
+                    ]
+                  },
+                  "blocking": {
+                    "type": "boolean"
+                  },
+                  "location": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "criterion": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "impact": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "resolution": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "owner": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "disposition": {
+                    "enum": [
+                      "open",
+                      "resolved"
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "severity",
+                  "blocking",
+                  "location",
+                  "evidence",
+                  "criterion",
+                  "impact",
+                  "resolution",
+                  "owner",
+                  "disposition"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "run_id",
+            "actor",
+            "artifact_hash",
+            "verdict",
+            "findings"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "reviews": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "run_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "actor": {
+            "type": "string",
+            "minLength": 1
+          },
+          "artifact_hash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "verdict": {
+            "enum": [
+              "pass",
+              "changes_required",
+              "needs_human_decision",
+              "blocked"
+            ]
+          },
+          "findings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "severity": {
+                  "enum": [
+                    "low",
+                    "medium",
+                    "high",
+                    "critical"
+                  ]
+                },
+                "blocking": {
+                  "type": "boolean"
+                },
+                "location": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "evidence": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "criterion": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "impact": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "resolution": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "owner": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "disposition": {
+                  "enum": [
+                    "open",
+                    "resolved"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "severity",
+                "blocking",
+                "location",
+                "evidence",
+                "criterion",
+                "impact",
+                "resolution",
+                "owner",
+                "disposition"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "run_id",
+          "actor",
+          "artifact_hash",
+          "verdict",
+          "findings"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "repairs": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "approvals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "actor": {
+            "type": "string",
+            "minLength": 1
+          },
+          "artifact_hash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "input_hash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "date": {
+            "type": "string",
+            "minLength": 1
+          },
+          "valid": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "actor",
+          "artifact_hash",
+          "input_hash",
+          "date",
+          "valid"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          },
+          "alternatives": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "affected": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "actor": {
+            "type": "string",
+            "minLength": 1
+          },
+          "date": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "text",
+          "rationale",
+          "alternatives",
+          "affected",
+          "actor",
+          "date"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "raid": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "risk",
+              "assumption",
+              "issue",
+              "dependency"
+            ]
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1
+          },
+          "impact": {
+            "type": "string",
+            "minLength": 1
+          },
+          "response": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "open",
+              "closed"
+            ]
+          },
+          "created": {
+            "type": "string",
+            "minLength": 1
+          },
+          "updated": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "owner",
+          "source",
+          "impact",
+          "response",
+          "status",
+          "created",
+          "updated"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "traceability": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "outcome": {
+            "type": "string",
+            "minLength": 1
+          },
+          "requirement": {
+            "type": "string",
+            "minLength": 1
+          },
+          "epic": {
+            "type": "string",
+            "minLength": 1
+          },
+          "story": {
+            "type": "string",
+            "minLength": 1
+          },
+          "test": {
+            "type": "string",
+            "minLength": 1
+          },
+          "code_change": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "outcome",
+          "requirement",
+          "epic",
+          "story",
+          "test",
+          "code_change"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "revision",
+    "project",
+    "config",
+    "stage",
+    "status",
+    "inputs",
+    "input_hash",
+    "questions",
+    "artifact",
+    "artifacts",
+    "dispatch",
+    "results",
+    "review",
+    "reviews",
+    "repairs",
+    "approvals",
+    "decisions",
+    "raid",
+    "traceability"
+  ],
+  "additionalProperties": false
+}
