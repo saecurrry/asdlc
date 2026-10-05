@@ -25,3 +25,7 @@ Post-foundation status visibility: current wiki status now names current activit
 Document layout correction: working brief, requirements, HLD, backlog, full report, review presentations and evidence are now directly under the wiki project stage folders. Baseline remains immutable historical evidence; foundation approval still binds its exact archived report and evidence hashes. User explicitly authorised syncing the current changes to both repositories.
 
 Recovery: load state.json, validate schema and regenerate owned views; do not infer approvals from chat. OS lock releases on exit/crash. Stale revisions require re-read and new dispatch. Failed workers return no accepted result. No automatic reset of corrupt state. Next permitted work is fixture implementation/testing and independent review; live delivery remains gated.
+
+## Duplicate folder removal
+
+The user requested removal of the baseline folder. Removed the duplicate tree and replaced approval/review source references with immutable Git commit links. Verified all seven accepted report/evidence hashes against Git objects and checked current Markdown links. Current documents remain in project stage folders.
