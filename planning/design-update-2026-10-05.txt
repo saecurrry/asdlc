@@ -1,0 +1,274 @@
+**Use this as the replacement context for the new agent.** It includes the workflow you described, the decisions already made, and what still needs implementing.
+
+# ASDLC — project context and implementation brief
+
+## Purpose
+
+I want to build a reusable, fully orchestrated agentic Software Development Life Cycle system, called ASDLC.
+
+It must take a business project from an initial idea through requirements, architecture, delivery planning, development, testing and approval. Specialist agents perform each stage. An independent challenger reviews every stage’s output and returns meaningful gaps to the responsible agent for correction.
+
+This is a persistent, staged delivery system. Its documents, decisions, reviews and execution state must survive across sessions and be understandable by both humans and agents.
+
+BMAD is a useful reference for the method, but using BMAD itself is not a settled implementation requirement.
+
+## Decisions already made
+
+- I will start by running Codex locally.
+- Application development takes place in a project Git repository.
+- A separate central GitHub repository stores project documentation, knowledge and persistent workflow state.
+- That repository is `saecurrry/asdlc-wiki`.
+- I will open a local clone of the repository in Obsidian.
+- Use ordinary Markdown, consistent folders, relative links and diagrams that remain useful outside Obsidian.
+- Each project has its own folder.
+- Shared standards, patterns and knowledge are maintained centrally.
+- Agents should capture lessons and propose useful findings for reuse across projects.
+- Progress is tracked in a project status document, with a continuously maintained RAID log.
+- I need concrete prompts, document formats and state contracts—not another generic starter or another request to explain these requirements.
+
+The existing wiki repository contains the initial folder structure, indexes, agent instructions and blank project templates. It does not yet contain a complete implemented pipeline.
+
+## Workflow stages
+
+### 1. Ideation and business discovery
+
+The purpose is to understand the proposed business project in enough detail to write meaningful requirements.
+
+The agent must work interactively with me through rounds of short, focused questions. It must not produce a large questionnaire or silently fill gaps with assumptions.
+
+Explore:
+
+- The business problem and why it matters.
+- Users, stakeholders and who owns the outcome.
+- The current process and its shortcomings.
+- The proposed future process.
+- Business outcomes and measures of success.
+- Scope and exclusions.
+- Important business rules and exceptions.
+- Constraints, dependencies and unanswered questions.
+
+Record answers as the conversation progresses. Distinguish confirmed facts, proposals, unknowns and agreed decisions.
+
+“No assumptions” means that an unconfirmed business fact or material decision must never be presented as agreed. A question may be deferred if its owner and required resolution stage are recorded.
+
+The challenger checks whether there is enough genuine understanding to proceed. Missing answers return to discovery.
+
+These discovery questions apply to future business projects. Do not restart discovery of ASDLC by asking me to repeat the requirements in this context.
+
+### 2. Business requirements
+
+Turn the agreed discovery into a proper Business Requirements Document.
+
+The BRD must describe the business need, outcomes, scope, users, processes, business rules, functional requirements, measurable quality requirements, exceptions, dependencies and acceptance expectations.
+
+Break the project into:
+
+- Initiatives representing business outcomes or investment objectives.
+- Epics representing coherent capabilities within each initiative.
+
+Maintain stable IDs and traceability. A BRD must contain substantive requirements; an initiative/epic list alone is insufficient.
+
+The challenger checks clarity, coverage, consistency, business value and verifiability. Resolve material findings before presenting the BRD for business approval.
+
+### 3. Technical high-level design
+
+Work through how the solution should run, rather than immediately selecting a stack and generating code.
+
+Discuss and record:
+
+- Execution and hosting model.
+- Cloud choices and suitable services.
+- Existing systems and partner involvement.
+- Integration boundaries and contracts.
+- Data ownership and movement.
+- Identity, security and access.
+- Availability, performance and recovery needs.
+- Deployment, environments, monitoring and support.
+- Relevant constraints and trade-offs.
+
+Consult the central `standards/` and `patterns/` folders. Identify which guidance applies, where it is missing and whether a proposed deviation needs a decision.
+
+Create:
+
+- C4 Level 1 system context.
+- C4 Level 2 container views.
+- Selective Level 3 component views where useful at this early stage.
+
+My original “Level 2.5” wording means Level 2 with selected component detail, rather than a requirement to fully decompose every container.
+
+Identify which sequence diagrams are needed. Focus on important journeys, integrations, asynchronous interactions and significant failure/recovery paths.
+
+Record material architecture decisions with alternatives and rationale. Missing business decisions must return to requirements rather than be invented by the architect.
+
+The challenger checks requirement coverage, feasibility, consistency, integration boundaries, operational behaviour and compliance with applicable standards and patterns.
+
+### 4. Stories and sprint breakdown
+
+Refine the epics into smaller stories that agents can execute and verify.
+
+Each story must include:
+
+- Stable ID and parent initiative/epic.
+- Business purpose and linked requirements.
+- Scope and exclusions.
+- Acceptance criteria.
+- Gherkin scenarios where they clarify business behaviour.
+- Relevant architecture decisions, contracts, standards and patterns.
+- Dependencies and prerequisites.
+- Verification approach.
+- Whether it can run serially or in parallel, with reasons.
+
+Parallel eligibility must consider shared interfaces, data, files and integration needs. Independent-looking stories are not automatically safe to execute concurrently.
+
+Phase the stories into sprints with clear goals and review points. Detail near-term work sufficiently for execution and refine later work as evidence emerges.
+
+The challenger checks coverage, story size, acceptance criteria, dependency correctness, sequencing and readiness.
+
+### 5. Development sprint by sprint
+
+Coding agents work from approved sprint stories and supporting collateral.
+
+They must consult the relevant standards and patterns, follow approved architecture decisions and stay within story scope.
+
+Tests are developed alongside implementation. Missing business rules or material technical decisions return to the owning stage.
+
+Record implementation progress, changed files, relevant code revisions, checks run, findings and blockers. Independent review evaluates the actual change against its intended behaviour.
+
+### 6. Sprint testing
+
+Testing runs throughout delivery. This stage validates the integrated sprint increment.
+
+Use the appropriate combination of unit, contract, integration, acceptance, regression and relevant non-functional tests.
+
+Gherkin should connect agreed business examples to acceptance verification where appropriate. It does not replace other test forms.
+
+Maintain test cases and evidence as work proceeds. Distinguish executed checks from proposed, skipped or unavailable checks.
+
+The challenger assesses both the result and the sufficiency of the evidence, including whether individual stories work together.
+
+### 7. Sprint review and approval
+
+Every sprint ends with a review and a sprint document recording:
+
+- Sprint goal and planned work.
+- Delivered, verified and accepted work.
+- Work carried forward.
+- Test and review evidence.
+- What was difficult.
+- Blockers, defects and issues.
+- Lessons learned.
+- Changes needed to requirements, architecture, patterns or standards.
+- RAID updates.
+- A recommendation to proceed, proceed with conditions or hold.
+
+Human acceptance is separate from challenger review. Record the decision and any conditions before advancing according to the agreed approval policy.
+
+Release and operational acceptance may be added explicitly, but should not be silently treated as an already agreed eighth stage.
+
+## Challenger and orchestration behaviour
+
+Every stage has an independent challenger supplied with the approved inputs, target output and stage-specific quality criteria.
+
+Findings must identify the location or evidence, practical impact, severity, owning stage and required resolution.
+
+Meaningful gaps return to the stage agent. Missing decisions return to the user. A business gap found during coding goes back to business requirements.
+
+A challenger may return no material findings. Do not require an arbitrary finding count or encourage endless stylistic rewriting.
+
+The orchestrator must control:
+
+- Stage selection and transitions.
+- Agent dispatch and handoffs.
+- Challenger review and repair loops.
+- Questions and approval pauses.
+- Dependency-aware execution.
+- Persistent progress and resume.
+- Updates to status, RAID and evidence.
+- Impact analysis when approved inputs change.
+
+Retry limits and escalation rules are needed. The previously suggested two automatic repair rounds are an implementation proposal, not a business requirement.
+
+Agents must not silently waive quality gates or approve themselves.
+
+## Wiki structure
+
+Preserve my established project structure:
+
+standards/
+patterns/
+projects/<project-id>/
+  index.md
+  project-status.md
+  raid.md
+  discovery/
+  requirements/
+  architecture/
+  decisions/
+  backlog/
+  sprints/
+  reviews/
+  approvals/
+  state/
+
+The agreed extensions are:
+
+- Root `knowledge/` for reusable findings and troubleshooting.
+- Root `templates/` for consistent project and document creation.
+- Project `lessons/` for learning specific to that project.
+
+Each project’s `index.md` is its navigation and context entry point.
+
+Do not replace this with an unrelated folder convention.
+
+## Documents and persistent state
+
+Document quality is a central requirement. Folder indexes and vague headings are not sufficient.
+
+Define exact templates for the discovery brief, BRD, initiatives, epics, HLD, decisions, stories, sprint plans, test evidence, challenger reports, approvals, sprint reports and lessons.
+
+Specify required sections, table columns, IDs, metadata, source references and how artifacts link together. Include worked examples so another agent can produce consistent results.
+
+Markdown is the human-readable knowledge and reporting layer. Structured state controls execution.
+
+Define canonical records for stage status, runs, artifact versions, questions, decisions, findings, approvals, RAID, stories, sprints and next actions.
+
+Avoid conflicting copies of state across Markdown and JSON. Specify which records are authoritative and how readable views are generated.
+
+Approval and verification evidence must reference exact artifact or code versions. Changed inputs trigger impact assessment and invalidate affected outputs where appropriate.
+
+The system must resume from saved records without depending on conversation memory or claiming that an unchecked task is complete.
+
+## Shared learning
+
+Capture lessons within the originating project first.
+
+Before promoting a lesson to shared knowledge or a pattern:
+
+- Preserve its source and evidence.
+- Explain applicability and limitations.
+- Record relevant technology versions.
+- Check duplication and contradictions.
+- Obtain independent review.
+
+A project-specific workaround must not automatically become a universal standard. Mandatory standards require explicit ownership and approval.
+
+Agents should retrieve relevant knowledge for their task, rather than loading the entire wiki.
+
+## What to deliver next
+
+Create a concrete initial pipeline grounded in this context:
+
+1. An orchestrator prompt and operating procedure.
+2. A specialist prompt for every stage.
+3. Stage-specific challenger criteria and repair/handoff instructions.
+4. Exact Markdown document templates with worked examples.
+5. A coherent structured state contract with representative records.
+6. Rules for questions, approvals, resume, change impact and RAID maintenance.
+7. A seeded ASDLC project using the requirements already provided.
+8. A practical implementation backlog for making the pipeline executable with local Codex.
+
+Keep confirmed requirements separate from proposed implementation choices. Language, storage engine and Codex integration mechanism remain implementation decisions.
+
+Preserve existing repository content. Do not claim the pipeline is automated, reviewed, approved or tested until there is evidence.
+
+Ask only targeted questions about genuinely missing decisions. Do not make me explain this project again.

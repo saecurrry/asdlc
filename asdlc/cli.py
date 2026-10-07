@@ -8,7 +8,7 @@ from .store import Store
 
 
 def main():
-    p = argparse.ArgumentParser(description="Local serial ASDLC discovery foundation")
+    p = argparse.ArgumentParser(description="Local serial ASDLC stage orchestration")
     p.add_argument("--wiki", default=".asdlc-local/wiki", help="Local wiki clone; default is labelled fixture")
     p.add_argument("--project", default="fixture")
     sub = p.add_subparsers(dest="command", required=True)
@@ -16,8 +16,10 @@ def main():
     init.add_argument("--target", required=True)
     init.add_argument("--brief", required=True)
     init.add_argument("--fixture", action="store_true", help="Explicitly label a non-Git wiki as fixture")
+    init.add_argument("--discovery-only", action="store_true", help="Use legacy schema v1 discovery without downstream handoffs")
+    init.add_argument("--repair-limit", type=int, default=2, help="Initial implementation policy; corrections per stage before hold")
     sub.add_parser("resume")
-    for command in ["start", "question", "answer", "inputs", "dispatch", "cancel", "approve"]:
+    for command in ["start", "question", "answer", "inputs", "dispatch", "cancel", "approve", "reject", "next-sprint"]:
         cmd = sub.add_parser(command)
         cmd.add_argument("--revision", type=int, required=True)
         if command == "question":
@@ -36,6 +38,12 @@ def main():
         if command == "approve":
             cmd.add_argument("--hash", required=True)
             cmd.add_argument("--actor", required=True)
+            cmd.add_argument("--run-next", action="store_true", help="After recording approval, run next specialist/reviewer to the next human pause")
+            cmd.add_argument("--prompts", help="Override installed specialist contracts with this directory")
+        if command == "reject":
+            cmd.add_argument("--hash", required=True)
+            cmd.add_argument("--actor", required=True)
+            cmd.add_argument("--reason", required=True)
     submit = sub.add_parser("submit")
     submit.add_argument("file")
     record = sub.add_parser("record", help="Persist a canonical decision, RAID or traceability proposal")
@@ -47,7 +55,11 @@ def main():
     raid.add_argument("--id", required=True)
     raid.add_argument("--status", choices=["open", "closed"], required=True)
     run = sub.add_parser("codex-run", help="Execute pending dispatch; human approvals stay manual")
-    run.add_argument("--prompts", default="prompts")
+    run.add_argument("--prompts", help="Override installed specialist contracts with this directory")
+    drive = sub.add_parser("run-stage", help="Run specialist/challenge/corrections until a human gate; never auto-approve")
+    drive.add_argument("--prompts", help="Override installed specialist contracts with this directory")
+    drive.add_argument("--worker-actor", default="stage-worker")
+    drive.add_argument("--reviewer-actor", default="stage-challenger")
     args = p.parse_args()
     store = Store(args.wiki, args.project)
     engine = Engine(store)
@@ -59,7 +71,8 @@ def main():
                 probe = subprocess.run(["git", "-C", args.wiki, "rev-parse", "--show-toplevel"], capture_output=True)
                 if probe.returncode:
                     p.error("Wiki must be an existing Git clone or explicitly --fixture")
-            store.create(initial(args.project, args.target, args.wiki, fixture, args.brief))
+            store.create(initial(args.project, args.target, args.wiki, fixture, args.brief,
+                                 pipeline=not args.discovery_only, repair_limit=args.repair_limit))
             result = store.load()
         elif args.command == "resume":
             result = store.resume()
@@ -77,12 +90,22 @@ def main():
             result = engine.cancel(args.revision)
         elif args.command == "approve":
             result = engine.approve(args.revision, args.hash, args.actor)
+            if args.run_next and result["status"] == "running":
+                from .adapters import CodexAdapter
+                result = engine.run_stage(CodexAdapter(), args.prompts)
+        elif args.command == "next-sprint":
+            result = engine.next_sprint(args.revision)
+        elif args.command == "reject":
+            result = engine.reject(args.revision, args.hash, args.actor, args.reason)
         elif args.command == "submit":
             result = engine.submit(json.loads(Path(args.file).read_text(encoding="utf-8")))
         elif args.command == "record":
             result = engine.record(args.revision, args.collection, json.loads(Path(args.file).read_text(encoding="utf-8")))
         elif args.command == "raid-status":
             result = engine.raid_status(args.revision, args.id, args.status)
+        elif args.command == "run-stage":
+            from .adapters import CodexAdapter
+            result = engine.run_stage(CodexAdapter(), args.prompts, args.worker_actor, args.reviewer_actor)
         else:
             from .adapters import CodexAdapter
             state = store.load()

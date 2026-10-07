@@ -3,6 +3,9 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+if (ROOT / 'asdlc' / 'schemas' / 'pipeline-state.json').exists():
+    raise SystemExit('Historical v1 generator disabled: it would overwrite current reviewed contracts. '
+                     'Edit current schemas/prompts explicitly; mirror prompt changes to asdlc/prompts.')
 S = {"type": "string", "minLength": 1}
 B = {"type": "boolean"}
 I = {"type": "integer", "minimum": 0}

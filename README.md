@@ -1,8 +1,35 @@
 # ASDLC
 
-Reusable local agentic SDLC foundation: Python CLI, durable project records, discovery questions, independent challenge, bounded corrections and explicit version-specific human approval. **Foundation preview; planning documents remain draft and human acceptance is pending.** Later planning and sprint delivery stages have prompt contracts/backlog but no runtime yet.
+Local serial SDLC orchestration. New projects use schema v2: specialist output → independent challenge → exact human approval → saved next-stage handoff. The seven stages are discovery, BRD, HLD, sprint planning, development, integrated testing and sprint review. Existing schema v1 discovery projects retain their previous behaviour.
 
-Start with [build plan](planning/build-plan.md), [requirements](planning/requirements.md), [architecture](planning/architecture.md), [backlog](planning/backlog.md) and [validation report](planning/sprint-report.md). The original [starter pack](asdlc-codex-starter-pack.md) is preserved; the current supplied brief authorises foundational local implementation while draft gates still protect live delivery.
+## Run a business project
+
+Use an existing application Git repository and a separate wiki clone. Init refuses an existing populated project folder; it does not overwrite human documents or migrate existing v1 state silently.
+
+Install the wheel with `python -m pip install <wheel-path>` in a dedicated environment. The runtime includes its nine specialist/operator contracts and schemas. Commands can run from your application folder; `--prompts <directory>` overrides the bundled contracts. Framework development records are excluded from the wheel.
+
+```powershell
+python -m asdlc --wiki C:\Docs\asdlc-wiki --project my-project init --target C:\Code\my-project --brief "The business problem and known facts"
+python -m asdlc --wiki C:\Docs\asdlc-wiki --project my-project run-stage
+```
+
+`run-stage` manages the current worker, independent reviewer and bounded corrections. It stops at missing input, escalation or exact-hash human approval. Read the generated project status for revision/hash and the stage gate/artifact table. Only an actual human decision authorises `approve`:
+
+```powershell
+python -m asdlc --wiki C:\Docs\asdlc-wiki --project my-project approve --revision N --hash CURRENT_HASH --actor human-owner --run-next
+```
+
+Approval saves the accepted stage and hands its exact package to the next stage in one transaction. `--run-next` invokes that next specialist/challenger and stops at its next human gate. Without it, the handoff is persisted and `run-stage` continues later. `reject --revision N --hash CURRENT_HASH --actor human-owner --reason "Changes needed"` records rejection and returns the current owner to correction; exhaustion holds. `resume` restores saved progress; it does not infer acceptance. After final sprint acceptance, `next-sprint --revision N` returns to planning, retaining business/HLD inputs and requiring approval of the new scope.
+
+`--repair-limit` on init is a version-bound implementation policy parameter (default two), not a business requirement. `--discovery-only` creates legacy v1 mode. Git synchronisation remains a separately authorised action.
+
+## Execution boundary
+
+The orchestrator can track all seven externally executed stages and validates delivery results against actual commit/dirty/untracked code digests. Code drift reopens development and invalidates affected delivery/testing/sprint authority. Source/guidance changes conservatively restart the dependency chain while preserving history. Stage artifacts and immutable content versions are materialised in the wiki; generated views cannot overwrite a human document.
+
+The built-in Codex process remains read-only and proposes complete UTF-8 file changes. The orchestrator applies them only under the exact write scope of an approved sprint, after executing its test commands against a separate source copy. Testing reruns those commands without proposing writes. Test failures return to bounded development correction; exhaustion holds. Initiative, epic and story inventories become separate generated wiki files. Legacy migration remains outstanding. [Delivery contracts and project use](docs/project-use.md).
+
+ASDLC's own development records under planning/ and wiki projects/asdlc/ are separate from a business project's operating inputs. [Build plan](planning/build-plan.md).
 
 ## Local setup (Windows PowerShell)
 
